@@ -1,0 +1,225 @@
+<?PHP
+require_once("./include/membersite_config.php");
+
+if(!$fgmembersite->CheckLogin())
+{
+    $fgmembersite->RedirectToURL("login.php");
+    exit;
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+      <link rel="STYLESHEET" type="text/css" href="style/fg_membersite.css" />
+      <script type='text/javascript' src='scripts/gen_validatorv31.js'></script>
+
+    <style>
+      body { padding-top: 60px; /* 60px to make the container go all the way
+      to the bottom of the topbar */ }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js">
+      </script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    	<div class="navbar-inner">
+    		<div class="container">
+    			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="brand" href="#">Health Token</a>
+    			<div class="nav-collapse collapse">
+    				<ul class="nav">
+    					<li>
+    						<a href="pa-login-home.php">Home</a>
+    					</li>
+    					<li>
+    						<a href="about.html">About</a>
+    					</li>
+    					<li>
+    						<a href="contact.html">Contact</a>
+    					</li>
+    				</ul>
+				<ul class="nav pull-right">
+					<li>
+    						<a class="pull-right" href="pa-login-home.php"><?= $fgmembersite->UserFullName(); ?></a>
+    					</li>
+					<li>
+    						<a class="pull-right" href="logout.php">Logout</a>
+    					</li>
+				</ul>
+    			</div>
+    			<!--/.nav-collapse -->
+    		</div>
+    	</div>
+    </div>
+
+<!-- Form Code Start -->
+<div class="container">
+    	<!-- Main hero unit for a primary marketing message or call to action
+    	-->
+    	<!-- Example row of columns -->
+	<br><br><br>
+    	<div class="hero-unit pull-left">
+	<form  method="post" action="access-controlled.php?go"  id="searchform">
+			<div class="control-group">
+    				<div class="controls">
+					<label for='query' >Enter query :</label>
+    					<input type="text" name='query' id='query' maxlength="50">
+					<span id='searchform_query_errorloc' class='error'></span>
+    				
+			
+		
+			<label class="radio">
+			<input type="radio" name='condition' id='condition' value="or">
+			      or
+			</label>
+
+			<label class="radio">
+			<input type="radio" name='condition' id='condition' value="and">
+			      and
+			</label>
+
+		    </div>
+		    </div>
+	
+
+		<div class="control-group">
+    				<div class="controls">
+					<label for='specialist' >Select specialization</label>
+		<select name="specialist">
+		<option value="none" selected="selected">Specialisation</option>
+		<option value="general">general practitioners</option>
+		<option value="dentist">dentist </option>
+		<option value="cardiologist">cardiologist</option>
+		<option value="dermatologists">Dermatologists</option>
+		<option value="diabetologists">Diabetologists</option>
+		<option value="gastroenterologists">Gastroenterologists</option>
+		<option value="gynaecologists">Gynaecologists</option>
+		<option value="nephrologists">Nephrologists</option>
+		<option value="neurologists">neurologists</option>
+		<option value="pediatricians">Pediatricians</option>
+		<option value="psychiatrists">psychiatrists</option>
+		<option value="surgeons">surgeons</option>
+	</select>
+	</div>
+	</div>
+	</br>
+      	<button type="submit" name="search" class="btn btn-primary">
+    				Search
+	</button>
+</form>
+</div>
+	<br><br><br><br>
+	<div class="well">
+		<h3>
+			Search for doctor with required specialization !
+		</h3>
+	</div>
+
+</div>   
+    <!-- /container -->
+      
+<?php
+if(isset($_POST['search']))
+{
+  	if(isset($_GET['go']))
+	{
+  		$query_name=$_POST['query'];
+  		$query_cond=$_POST['condition'];
+ 		$query_sp=$_POST['specialist'];
+  		$fgmembersite->DBLogin();
+		if($query_cond == "and")
+		{
+			if(!empty($query_name))
+			{
+				if($query_sp == "none")
+					$qry = "SELECT id,name,spl FROM dc WHERE name LIKE '$query_name%'";
+				else
+					$qry = "SELECT id,name,spl FROM dc WHERE name LIKE '$query_name%' AND spl='$query_sp'";
+  				$result = mysql_query($qry,$fgmembersite->connection);
+  				//$result=mysql_query("SELECT name FROM dc WHERE name LIKE '$query%'",$fgmembersite->connection);
+  				//-create  while loop and loop through result set
+  				while($row=mysql_fetch_array($result))
+				{
+  					//-display the result of the array
+					echo "<div class=\"well\">";
+						echo "<h3>name : ".$row['name']."</h3>";
+						echo "Specialization : ".$row['spl']."";
+						echo"</br><a  href=\"book_slots.php?id=".$row['id']."\"><input type=\"button\" value=\"get appointment\" /></a>";
+					echo "</div>";
+  				}
+			}
+			
+		}
+		else
+		{
+			if(empty($query_name) and $query_sp == "none")
+				$qry = "SELECT id,name,spl FROM dc WHERE spl='general'";
+			else if(empty($query_name))
+				$qry = "SELECT id,name,spl FROM dc WHERE spl='$query_sp'";
+			else if($query_sp == "none")
+				$qry = "SELECT id,name,spl FROM dc WHERE name LIKE '$query_name%'";
+			else
+				$qry = "SELECT id,name,spl FROM dc WHERE name LIKE '$query_name%' OR spl='$query_sp'";
+			$result = mysql_query($qry,$fgmembersite->connection);
+                                //$result=mysql_query("SELECT name FROM dc WHERE name LIKE '$query%'",$fgmembersite->connection);
+                                //-create  while loop and loop through result set
+                                while($row=mysql_fetch_array($result))
+                                {
+                                        //-display the result of the array
+                                        echo "<div class=\"well\">";
+						echo "<h3>name : ".$row['name']."</h3>";
+						echo "Specialization : ".$row['spl']."";
+						echo"</br><a  href=\"book_slots.php?id=".$row['id']."\"><input type=\"button\" value=\"get appointment\" /></a>";
+					echo "</div>";
+                                }
+		}
+	}
+}
+?>
+<footer>
+      <hr>
+      &copy health token
+      </footer>
+<style>
+      
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    </script>
+    <script src="assets/js/bootstrap.js">
+    </script>
+    <script>
+
+    </script>
+
+</body>
+</html>

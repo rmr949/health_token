@@ -1,0 +1,146 @@
+<?PHP
+require_once("./include/membersite_config.php");
+
+$emailsent = false;
+if(isset($_POST['submitted']))
+{
+   if($fgmembersite->EmailResetPasswordLink())
+   {
+        $fgmembersite->RedirectToURL("reset-pwd-link-sent.html");
+        exit;
+   }
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body { padding-top: 60px; /* 60px to make the container go all the way
+      to the bottom of the topbar */ }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <script type='text/javascript' src='scripts/gen_validatorv31.js'></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js">
+      </script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    	<div class="navbar-inner">
+    		<div class="container">
+    			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="brand" href="#">Health Token</a>
+    			<div class="nav-collapse collapse">
+    				<ul class="nav">
+    					<li>
+    						<a href="home.html">Home</a>
+    					</li>
+    					<li>
+    						<a href="about.html">About</a>
+    					</li>
+    					<li>
+    						<a href="contact.html">Contact</a>
+    					</li>
+    				</ul>
+    			</div>
+    			<!--/.nav-collapse -->
+    		</div>
+    	</div>
+<!-- Form Code Start -->
+<div class="container">
+    	<!-- Main hero unit for a primary marketing message or call to action
+    	-->
+    	<!-- Example row of columns -->
+	<br><br><br><br>
+    	<div class="hero-unit pull-left">
+    		<form class="form-search" id='resetreq' action='<?php echo $fgmembersite->GetSelfScript(); ?>' method='post' accept-charset='UTF-8'>
+			<input type='hidden' name='submitted' id='submitted' value='1'/>
+			<div><span class='error'><?php echo $fgmembersite->GetErrorMessage(); ?></span></div>
+    			<div class="control-group">
+    				<div class="controls">
+    					<input type="text" name='email' id='email' value="email" maxlength="50">
+					<span id='resetreq_email_errorloc' class='error'></span>
+    				</div>
+    			</div>
+    			<br>
+    			<button type="submit" class="btn btn-primary">
+    				Submit
+    			</button>
+    		</form>
+    	</div>
+	<br><br><br><br>
+	<div class="well">
+		<h3>
+			Enter your email id which was used to register with us
+		</h3>
+	</div>
+
+    </div>
+    <!-- /container -->
+      <footer>
+      <hr>
+      &copy health token
+      </footer>
+
+    <style>
+      
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    </script>
+    <script src="assets/js/bootstrap.js">
+    </script>
+    <script>
+
+    </script>
+<!-- client-side Form Validations:
+Uses the excellent form validation script from JavaScript-coder.com-->
+
+<script type='text/javascript'>
+// <![CDATA[
+
+    var frmvalidator  = new Validator("resetreq");
+    frmvalidator.EnableOnPageErrorDisplay();
+    frmvalidator.EnableMsgsTogether();
+
+    frmvalidator.addValidation("email","req","Please provide the email address used to sign-up");
+    frmvalidator.addValidation("email","email","Please provide the email address used to sign-up");
+
+// ]]>
+</script>
+
+</div>
+<!--
+Form Code End (see html-form-guide.com for more info.)
+-->
+
+</body>
+</html>
